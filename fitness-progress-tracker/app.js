@@ -1,8 +1,6 @@
 const express = require("express");
 const db = require("./queries");
 
-const praksa = require('./praksa');
-
 const app = express();
 
 //Enables us to read the request body
