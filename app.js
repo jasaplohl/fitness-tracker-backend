@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("./queries");
+const db = require("./common/helpers/common.helper");
 
 const app = express();
 

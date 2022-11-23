@@ -1,28 +1,31 @@
-const dotenv = require('dotenv');
 const { Pool } = require("pg");
+const dotenv = require('dotenv');
 
 dotenv.config();
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_DATABASE,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    ssl: false
 });
 
 /**
  * QUERY THE DATA:
  */
 
-const getAllWorkouts = (request, response) => {
-    const queryText = 'SELECT * FROM workout ORDER BY name ASC';
-    pool.query(queryText, (err, results) => {
-        if(err) {
-            console.log(err);
-        } else {
-            response.json(results.rows);
-        }
-    });
+const getAllWorkouts = async (request, response) => {
+    try {
+        const res = await pool.query('SELECT * FROM workout');
+        return response.json(res.rows);
+    } catch (err) {
+        console.error(err);
+        return response.json({
+            error: err.message
+        });
+    }
 }
 
 const getWorkoutByName = (request, response) => {
